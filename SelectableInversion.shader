@@ -41,10 +41,10 @@
 			sampler2D _Mask;
 			float4 _Mask_ST;
 
-			float4 _MidCol;
+			uniform float4 _MidCol;
 			
-			int _IsColoured;
-			int _UseMaskCol;
+			uniform int _IsColoured;
+			uniform int _UseMaskCol;
 
 			v2f vert (appdata v)
 			{
@@ -60,6 +60,7 @@
 				// sample the texture
 				fixed4 Col = tex2D(_MainTex, i.uv1);
 				fixed4 MaskCol = tex2D(_Mask, i.uv2);
+				MaskCol = MaskCol < 0 ? 0 : (MaskCol > 1 ? 1 : MaskCol);
 				float4 ColInv = float4(Col.a - Col.rgb, Col.a);
 				float Ratio = (MaskCol.r + MaskCol.g + MaskCol.b) / 3.0;
 				if (_IsColoured > 0)

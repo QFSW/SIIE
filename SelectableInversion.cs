@@ -65,23 +65,19 @@ public class SelectableInversion : MonoBehaviour
 {
     /// <summary>If the inverted image should converge to a colour as the inversion approaches 50%.</summary>
     [Tooltip("If the inverted image should converge to a colour as the inversion approaches 50%.")]
-    [SerializeField]
-    private bool UseColoredInversion;
+    public bool UseColoredInversion;
 
     /// <summary>Uses the color of the inversion camera's render texture as inversion converges to 50%.</summary>
     [Tooltip("Uses the color of the inversion camera's render texture as inversion converges to 50%.")]
-    [SerializeField]
-    private bool UseMaskColor;
+    public bool UseMaskColor;
 
     /// <summary>The colour to converge to as the inversion converges to 50%.</summary>
     [Tooltip("The colour to converge to as the inversion converges to 50%.")]
-    [SerializeField]
-    private Color MidInversionColor = new Color(0.5f, 0.5f, 0.5f);
+    public Color MidInversionColor = new Color(0.5f, 0.5f, 0.5f);
 
     /// <summary>The background color that the image effect clears to.</summary>
     [Tooltip("The background color that the image effect clears to.")]
-    [SerializeField]
-    private Color ClearColor = new Color(0, 0, 0);
+    public Color ClearColor = new Color(0, 0, 0);
 
     /// <summary>The material created for inverting the texture.</summary>
     [HideInInspector]
@@ -163,7 +159,17 @@ public class SelectableInversion : MonoBehaviour
         InversionCamera.cullingMask = 1 << LayerMask.NameToLayer("SelectableInversion");
     }
 
-    void Update() { InversionCamera.backgroundColor = ClearColor; }
+    void Update()
+    {
+        InversionCamera.backgroundColor = ClearColor;
+        if (InversionCamera.targetTexture.height != MainCamera.pixelHeight || InversionCamera.targetTexture.width != MainCamera.pixelWidth)
+        {
+            InversionCamera.aspect = MainCamera.aspect;
+            InversionCamera.targetTexture = new RenderTexture(MainCamera.pixelWidth, MainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
+            InversionCamera.projectionMatrix = MainCamera.projectionMatrix;
+            InversionMaterial.SetTexture("_Mask", InversionCamera.targetTexture);
+        }
+    }
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
