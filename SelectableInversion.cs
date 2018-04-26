@@ -162,7 +162,7 @@ public class SelectableInversion : MonoBehaviour
     void Update()
     {
         InversionCamera.backgroundColor = ClearColor;
-        if (InversionCamera.targetTexture.height != MainCamera.pixelHeight || InversionCamera.targetTexture.width != MainCamera.pixelWidth)
+        if (InversionCamera.targetTexture.height != MainCamera.pixelHeight || InversionCamera.targetTexture.width != MainCamera.pixelWidth || InversionCamera.projectionMatrix != MainCamera.projectionMatrix)
         {
             InversionCamera.aspect = MainCamera.aspect;
             InversionCamera.targetTexture = new RenderTexture(MainCamera.pixelWidth, MainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
