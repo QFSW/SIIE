@@ -111,7 +111,7 @@ public class SelectableInversion : MonoBehaviour
 
             //Copies over aspect ratio and creates the render texture
             InversionCamera.aspect = MainCamera.aspect;
-            InversionCamera.targetTexture = new RenderTexture(InversionCamera.pixelWidth, InversionCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
+            InversionCamera.targetTexture = new RenderTexture(MainCamera.pixelWidth, MainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
 
             //Creates the inversion material
             Shader InversionShader = Shader.Find("Hidden/ImageEffects/SelectableInversion");
@@ -162,7 +162,7 @@ public class SelectableInversion : MonoBehaviour
     void Update()
     {
         InversionCamera.backgroundColor = ClearColor;
-        if (InversionCamera.targetTexture.height != MainCamera.pixelHeight || InversionCamera.targetTexture.width != MainCamera.pixelWidth || InversionCamera.projectionMatrix != MainCamera.projectionMatrix)
+        if (InversionCamera.targetTexture.height != MainCamera.pixelHeight || InversionCamera.targetTexture.width != MainCamera.pixelWidth)
         {
             InversionCamera.aspect = MainCamera.aspect;
             InversionCamera.targetTexture = new RenderTexture(MainCamera.pixelWidth, MainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
