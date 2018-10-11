@@ -17,10 +17,10 @@ namespace QFSW.SIIE.Internal.Editor
 
         private void OnEnable()
         {
-            useColoredInversion = serializedObject.FindProperty("UseColoredInversion");
-            useMaskColor = serializedObject.FindProperty("UseMaskColor");
-            midInversionColor = serializedObject.FindProperty("MidInversionColor");
-            clearColor = serializedObject.FindProperty("ClearColor");
+            useColoredInversion = serializedObject.FindProperty("useColoredInversion");
+            useMaskColor = serializedObject.FindProperty("useMaskColor");
+            midInversionColor = serializedObject.FindProperty("midInversionColor");
+            clearColor = serializedObject.FindProperty("clearColor");
         }
 
         public override void OnInspectorGUI()
