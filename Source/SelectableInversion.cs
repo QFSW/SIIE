@@ -109,19 +109,24 @@ namespace QFSW.SIIE
 
         private void SyncToInversionCamera()
         {
-            inversionCamera.aspect = mainCamera.aspect;
-            inversionCamera.targetTexture = new RenderTexture(mainCamera.pixelWidth, mainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
             inversionCamera.projectionMatrix = mainCamera.projectionMatrix;
-            inversionMaterial.SetTexture(ShaderMask, inversionCamera.targetTexture);
+            inversionCamera.orthographic = mainCamera.orthographic;
+            inversionCamera.orthographicSize = mainCamera.orthographicSize;
+
+            if (inversionCamera.activeTexture == null
+                || inversionCamera.targetTexture.height != mainCamera.pixelHeight
+                || inversionCamera.targetTexture.width != mainCamera.pixelWidth)
+            {
+                inversionCamera.aspect = mainCamera.aspect;
+                inversionCamera.targetTexture = new RenderTexture(mainCamera.pixelWidth, mainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
+                inversionMaterial.SetTexture(ShaderMask, inversionCamera.targetTexture);
+            }
         }
 
         private void Update()
         {
             inversionCamera.backgroundColor = clearColor;
-            if (inversionCamera.targetTexture.height != mainCamera.pixelHeight || inversionCamera.targetTexture.width != mainCamera.pixelWidth)
-            {
-                SyncToInversionCamera();
-            }
+            SyncToInversionCamera();
         }
 
         private void OnRenderImage(RenderTexture src, RenderTexture dest)
