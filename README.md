@@ -11,12 +11,12 @@ This image effect allows you to effortlessly create selectively inverted parts o
 
 ![](http://media.indiedb.com/images/members/5/4201/4200312/profile/Capture.PNG)
 
-### Options
+The script is contained under the `QFSW.SIIE` namespace
+
+### Settings
  - **Use Colored Inversion** causes the image to approach a user specified color as the inversion approaches 50%, instead of the gray that would otherwise be achieved by combining an inverted image with a non inverted image
  - **Use Mask Color** will use the color of the mask at that pixel for the mid inversion color instead of a constant user defined color
  - **Clear Color** controls which color the Inversion Camera will clear to; you can also think of this as the default inversion value
-
-_The script is contained under the `QFSW.SIIE` namespace_
 
 ### Installation via Package Manager
 
