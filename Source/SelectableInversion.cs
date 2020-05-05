@@ -10,19 +10,27 @@ namespace QFSW.SIIE
     [AddComponentMenu("Image Effects/Selectable Inversion")]
     public class SelectableInversion : MonoBehaviour
     {
-        /// <summary>If the inverted image should converge to a color as the inversion approaches 50%.</summary>
+        /// <summary>
+        /// If the inverted image should converge to a color as the inversion approaches 50%.
+        /// </summary>
         [Tooltip("If the inverted image should converge to a color as the inversion approaches 50%.")]
         public bool useColoredInversion;
 
-        /// <summary>Uses the color of the inversion camera's render texture as inversion converges to 50%.</summary>
+        /// <summary>
+        /// Uses the color of the inversion camera's render texture as inversion converges to 50%.
+        /// </summary>
         [Tooltip("Uses the color of the inversion camera's render texture as inversion converges to 50%.")]
         public bool useMaskColor;
 
-        /// <summary>The colour to converge to as the inversion converges to 50%.</summary>
-        [Tooltip("The colour to converge to as the inversion converges to 50%.")]
+        /// <summary>
+        /// The color to converge to as the inversion converges to 50%.
+        /// </summary>
+        [Tooltip("The color to converge to as the inversion converges to 50%.")]
         public Color midInversionColor = new Color(0.5f, 0.5f, 0.5f);
 
-        /// <summary>The background color that the image effect clears to.</summary>
+        /// <summary>
+        /// The background color that the image effect clears to.
+        /// </summary>
         [Tooltip("The background color that the image effect clears to.")]
         public Color clearColor = new Color(0, 0, 0);
 
@@ -41,24 +49,23 @@ namespace QFSW.SIIE
             if (LayerMask.NameToLayer(InversionLayer) < 0)
             {
                 //Removes itself if required layer is not present
-                Debug.LogError("Please add the layer SelectableInversion then add this image effect!");
+                Debug.LogError($"Please add the layer {InversionLayer} then add this image effect!");
                 DestroyImmediate(this);
             }
             else
             {
+                if (!inversionMaterial)
+                {
+                    //Creates the inversion material
+                    Shader inversionShader = Shader.Find("Hidden/ImageEffects/SelectableInversion");
+                    inversionMaterial = new Material(inversionShader);
+                }
+
                 //Gets the main camera and the inversion camera
                 if (!mainCamera) { mainCamera = GetComponent<Camera>(); }
                 mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(InversionLayer));
                 GetInversionCamera();
-
-                //Copies over aspect ratio and creates the render texture
-                inversionCamera.aspect = mainCamera.aspect;
-                inversionCamera.targetTexture = new RenderTexture(mainCamera.pixelWidth, mainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
-
-                //Creates the inversion material
-                Shader inversionShader = Shader.Find("Hidden/ImageEffects/SelectableInversion");
-                inversionMaterial = new Material(inversionShader);
-                inversionMaterial.SetTexture(ShaderMask, inversionCamera.targetTexture);
+                SyncToInversionCamera();
             }
         }
 
@@ -75,7 +82,7 @@ namespace QFSW.SIIE
         {
             //Attempts to retrieve the camera if it exists
             if (inversionCamera) { return; }
-            Transform inversionTransform = this.transform.Find("_SelectableInversionCamera");
+            Transform inversionTransform = transform.Find("_SelectableInversionCamera");
             if (inversionTransform)
             {
                 inversionCamera = inversionTransform.GetComponent<Camera>();
@@ -100,15 +107,20 @@ namespace QFSW.SIIE
             inversionCamera.cullingMask = 1 << LayerMask.NameToLayer(InversionLayer);
         }
 
+        private void SyncToInversionCamera()
+        {
+            inversionCamera.aspect = mainCamera.aspect;
+            inversionCamera.targetTexture = new RenderTexture(mainCamera.pixelWidth, mainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
+            inversionCamera.projectionMatrix = mainCamera.projectionMatrix;
+            inversionMaterial.SetTexture(ShaderMask, inversionCamera.targetTexture);
+        }
+
         private void Update()
         {
             inversionCamera.backgroundColor = clearColor;
             if (inversionCamera.targetTexture.height != mainCamera.pixelHeight || inversionCamera.targetTexture.width != mainCamera.pixelWidth)
             {
-                inversionCamera.aspect = mainCamera.aspect;
-                inversionCamera.targetTexture = new RenderTexture(mainCamera.pixelWidth, mainCamera.pixelHeight, 0, RenderTextureFormat.ARGBHalf);
-                inversionCamera.projectionMatrix = mainCamera.projectionMatrix;
-                inversionMaterial.SetTexture(ShaderMask, inversionCamera.targetTexture);
+                SyncToInversionCamera();
             }
         }
 
