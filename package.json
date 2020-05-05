@@ -1,0 +1,15 @@
+{
+  "name": "com.qfsw.siie",
+  "displayName": "SIIE",
+  "author": "QFSW",
+  "description": "Selectable inversion image effect that allows you to effortlessly create selectively inverted parts of the screen",
+  "bugs": {
+    "email": "support@qfsw.co.uk",
+    "url": "https://github.com/QFSW/SIIE/issues"
+  },
+  "version": "1.1.0",
+  "unity": "2018.3",
+  "license": "LICENSE.md",
+  "readme": "README.md",
+  "changelog": "CHANGELOG.md"
+}

@@ -48,7 +48,7 @@ namespace QFSW.SIIE
             {
                 //Gets the main camera and the inversion camera
                 if (!mainCamera) { mainCamera = GetComponent<Camera>(); }
-                mainCamera.cullingMask = mainCamera.cullingMask & ~(1 << LayerMask.NameToLayer(InversionLayer));
+                mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(InversionLayer));
                 GetInversionCamera();
 
                 //Copies over aspect ratio and creates the render texture
