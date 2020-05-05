@@ -30,7 +30,7 @@ namespace QFSW.SIIE
         [SerializeField] [HideInInspector] private Camera mainCamera;
         [SerializeField] [HideInInspector] private Camera inversionCamera;
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (LayerMask.NameToLayer("SelectableInversion") < 0)
             {
@@ -56,7 +56,7 @@ namespace QFSW.SIIE
             }
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (inversionCamera)
             {
@@ -94,7 +94,7 @@ namespace QFSW.SIIE
             inversionCamera.cullingMask = 1 << LayerMask.NameToLayer("SelectableInversion");
         }
 
-        void Update()
+        private void Update()
         {
             inversionCamera.backgroundColor = clearColor;
             if (inversionCamera.targetTexture.height != mainCamera.pixelHeight || inversionCamera.targetTexture.width != mainCamera.pixelWidth)
@@ -106,10 +106,10 @@ namespace QFSW.SIIE
             }
         }
 
-        void OnRenderImage(RenderTexture src, RenderTexture dest)
+        private void OnRenderImage(RenderTexture src, RenderTexture dest)
         {
             //Passes data to the shader and performs the inversion
-            inversionMaterial.SetInt("_IsColoured", useColoredInversion ? 1 : 0);
+            inversionMaterial.SetInt("_IsColored", useColoredInversion ? 1 : 0);
             inversionMaterial.SetInt("_UseMaskCol", useMaskColor ? 1 : 0);
             inversionMaterial.SetColor("_MidCol", midInversionColor);
             Graphics.Blit(src, dest, inversionMaterial);

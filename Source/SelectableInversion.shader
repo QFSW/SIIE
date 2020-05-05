@@ -5,7 +5,7 @@
 		_MainTex ("Texture", 2D) = "white" {}
 		_Mask("Mask", 2D) = "white" {}
 		_MidCol("Half Inverted Color", 2D) = "gray" {}
-		_IsColoured("Coloured Inversion", int) = 0
+		_IsColored("Colored Inversion", int) = 0
 		_UseMaskCol("Use Mask Color", int) = 0
 	}
 	SubShader
@@ -43,7 +43,7 @@
 
 			uniform float4 _MidCol;
 			
-			uniform int _IsColoured;
+			uniform int _IsColored;
 			uniform int _UseMaskCol;
 
 			v2f vert (appdata v)
@@ -63,7 +63,7 @@
 				MaskCol = MaskCol < 0 ? 0 : (MaskCol > 1 ? 1 : MaskCol);
 				float4 ColInv = float4(Col.a - Col.rgb, Col.a);
 				float Ratio = (MaskCol.r + MaskCol.g + MaskCol.b) / 3.0;
-				if (_IsColoured > 0)
+				if (_IsColored > 0)
 				{
 					float MidColStrength = 1.0 - 2 * abs(0.5 - Ratio);
 					float4 BlendCol = _UseMaskCol ? MaskCol : _MidCol;
