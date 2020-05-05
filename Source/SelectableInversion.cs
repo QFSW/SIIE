@@ -96,14 +96,7 @@ namespace QFSW.SIIE
             cameraObj.transform.localPosition = Vector3.zero;
             cameraObj.transform.localRotation = Quaternion.identity;
             inversionCamera = cameraObj.AddComponent<Camera>();
-            inversionCamera.depth = mainCamera.depth;
-            inversionCamera.renderingPath = mainCamera.renderingPath;
-            inversionCamera.projectionMatrix = mainCamera.projectionMatrix;
-            inversionCamera.fieldOfView = mainCamera.fieldOfView;
-            inversionCamera.orthographic = mainCamera.orthographic;
-            inversionCamera.orthographicSize = mainCamera.orthographicSize;
             inversionCamera.clearFlags = CameraClearFlags.SolidColor;
-            inversionCamera.backgroundColor = clearColor;
             inversionCamera.cullingMask = 1 << LayerMask.NameToLayer(InversionLayer);
         }
 
@@ -112,6 +105,9 @@ namespace QFSW.SIIE
             inversionCamera.projectionMatrix = mainCamera.projectionMatrix;
             inversionCamera.orthographic = mainCamera.orthographic;
             inversionCamera.orthographicSize = mainCamera.orthographicSize;
+            inversionCamera.fieldOfView = mainCamera.fieldOfView;
+            inversionCamera.depth = mainCamera.depth;
+            inversionCamera.renderingPath = mainCamera.renderingPath;
 
             if (inversionCamera.activeTexture == null
                 || inversionCamera.targetTexture.height != mainCamera.pixelHeight
