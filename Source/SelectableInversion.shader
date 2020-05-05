@@ -57,20 +57,22 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				// sample the texture
-				fixed4 Col = tex2D(_MainTex, i.uv1);
-				fixed4 MaskCol = tex2D(_Mask, i.uv2);
-				MaskCol = MaskCol < 0 ? 0 : (MaskCol > 1 ? 1 : MaskCol);
-				float4 ColInv = float4(Col.a - Col.rgb, Col.a);
-				float Ratio = (MaskCol.r + MaskCol.g + MaskCol.b) / 3.0;
+				fixed4 col = tex2D(_MainTex, i.uv1);
+				fixed4 maskCol = tex2D(_Mask, i.uv2);
+
+				maskCol = maskCol < 0 ? 0 : (maskCol > 1 ? 1 : maskCol);
+				float4 colInv = float4(1 - col.rgb, col.a);
+				float ratio = (maskCol.r + maskCol.g + maskCol.b) / 3.0;
+
 				if (_IsColored > 0)
 				{
-					float MidColStrength = 1.0 - 2 * abs(0.5 - Ratio);
-					float4 BlendCol = _UseMaskCol ? MaskCol : _MidCol;
-					if (Ratio > 0.5) { return MidColStrength * BlendCol + (1 - MidColStrength) * ColInv; }
-					else { return MidColStrength * BlendCol + (1 - MidColStrength) * Col; }
+					float midColStrength = 1.0 - 2 * abs(0.5 - ratio);
+					float4 blendCol = _UseMaskCol ? maskCol : _MidCol;
+
+					if (ratio > 0.5) { return midColStrength * blendCol + (1 - midColStrength) * colInv; }
+					else { return midColStrength * blendCol + (1 - midColStrength) * col; }
 				}
-				else { return Ratio * ColInv + (1 - Ratio) * Col; }
+				else { return ratio * colInv + (1 - ratio) * col; }
 			}
 			ENDCG
 		}
